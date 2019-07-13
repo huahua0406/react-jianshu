@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 //导入样式js文件
-import { ResetCss } from './style.js'
+import { GlobalStyle } from './style.js'
 import { GlobalIconfont } from './assets/fonts/iconfont.js'
 // store
 import store from './store';
@@ -20,7 +20,7 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <React.Fragment>
-                    <ResetCss />
+                    <GlobalStyle />
                     <GlobalIconfont />
                     <BrowserRouter>
                         <Header />
