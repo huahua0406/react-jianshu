@@ -20,71 +20,109 @@ import {
 import { actionCreators } from './store';
 import { actionCreators as loginActionCreators } from '../../pages/login/store';
 
-
 class Header extends Component {
-
-    getListArea () {
-        const { focused, list, page , totalPage,  mouseIn, handleMouseEnter, handleMouseLeave, handleChangePage} = this.props;
+    getListArea() {
+        const {
+            focused,
+            list,
+            page,
+            totalPage,
+            mouseIn,
+            handleMouseEnter,
+            handleMouseLeave,
+            handleChangePage
+        } = this.props;
         const pageList = [];
         const jsList = list.toJS();
-        if(jsList.length){
+        if (jsList.length) {
             for (let i = (page - 1) * 10; i < page * 10; i++) {
-                if(jsList[i]){
+                if (jsList[i]) {
                     pageList.push(
-                        <SearchInfoItem key={jsList[i]}>{jsList[i]}</SearchInfoItem>
-                    )
+                        <SearchInfoItem key={jsList[i]}>
+                            {jsList[i]}
+                        </SearchInfoItem>
+                    );
                 }
             }
         }
 
-        if(focused||mouseIn){
+        if (focused || mouseIn) {
             return (
-                <SearchInfo onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}>
-                    <SearchInfoTitle>热门搜索
-                        <SearchInfoSwitch onClick={()=>{ handleChangePage(page, totalPage, this.spinIcon ) }}>
-                            <i ref={(icon)=>this.spinIcon = icon} className="iconfont spin">&#xe851;</i> 换一批
+                <SearchInfo
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}>
+                    <SearchInfoTitle>
+                        热门搜索
+                        <SearchInfoSwitch
+                            onClick={() => {
+                                handleChangePage(
+                                    page,
+                                    totalPage,
+                                    this.spinIcon
+                                );
+                            }}>
+                            <i
+                                ref={icon => (this.spinIcon = icon)}
+                                className="iconfont spin">
+                                &#xe851;
+                            </i>{' '}
+                            换一批
                         </SearchInfoSwitch>
                     </SearchInfoTitle>
-                    <SearchInfoList>
-                        { pageList }
-                    </SearchInfoList>
+                    <SearchInfoList>{pageList}</SearchInfoList>
                 </SearchInfo>
-            )
-        }else{
-            return null
+            );
+        } else {
+            return null;
         }
     }
 
-    render(){
-        const { focused, handleInputFocus, handleInputBlur, list, login, logout  } = this.props;
+    render() {
+        const {
+            focused,
+            handleInputFocus,
+            handleInputBlur,
+            list,
+            login,
+            logout
+        } = this.props;
         return (
             <HeaderWrapper className="header">
-				<Logo/>
+                <Logo />
                 <Nav>
-                    <NavItem className="left active">
-                        首页
-                    </NavItem>
+                    <NavItem className="left active">首页</NavItem>
                     <NavItem className="left">下载APP</NavItem>
-                    {
-						login ?
-							<NavItem onClick={logout} className='right'>退出</NavItem> :
-							<Link to='/login'><NavItem className='right sign-in'>登陆</NavItem></Link>
-					}
+                    {login ? (
+                        <NavItem onClick={logout} className="right">
+                            退出
+                        </NavItem>
+                    ) : (
+                        <Link to="/login">
+                            <NavItem className="right sign-in">登陆</NavItem>
+                        </Link>
+                    )}
                     <NavItem className="right">
                         <i className="iconfont">&#xe636;</i>
                     </NavItem>
                     <SearchWrapper>
-                        <CSSTransition in={focused}
-                        timeout={200}
-                        classNames="slide">
+                        <CSSTransition
+                            in={focused}
+                            timeout={200}
+                            classNames="slide">
                             <NavSearch
-                            className={focused ? 'focused' : ''}
-                            onFocus={() => handleInputFocus(list)}
-                            onBlur={handleInputBlur}
+                                className={focused ? 'focused' : ''}
+                                onFocus={() => handleInputFocus(list)}
+                                onBlur={handleInputBlur}
                             />
                         </CSSTransition>
-                        <i className={focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe609;</i>
+                        <i
+                            className={
+                                focused
+                                    ? 'focused iconfont zoom'
+                                    : 'iconfont zoom'
+                            }>
+                            &#xe609;
+                        </i>
                         {this.getListArea()}
                     </SearchWrapper>
                 </Nav>
@@ -97,12 +135,11 @@ class Header extends Component {
                     <Button className="sign-up">注册</Button>
                 </Addition>
             </HeaderWrapper>
-        )
+        );
     }
 }
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         // 获取数据的时候用get('header').get('focused')，或者getIn([])
         focused: state.getIn(['header', 'focused']),
@@ -111,44 +148,47 @@ const mapStateToProps = (state) => {
         totalPage: state.getIn(['header', 'totalPage']),
         mouseIn: state.getIn(['header', 'mouseIn']),
         login: state.getIn(['login', 'isLogin'])
-    }
-}
+    };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        handleInputFocus(list){
-            (list.size === 0)&&dispatch(actionCreators.getList());
+        handleInputFocus(list) {
+            list.size === 0 && dispatch(actionCreators.getList());
             dispatch(actionCreators.serachFocus());
         },
-        handleInputBlur(){
-            dispatch(dispatch(actionCreators.serachBlur()));
+        handleInputBlur() {
+            dispatch(actionCreators.serachBlur());
         },
-        handleMouseEnter(){
-            dispatch(dispatch(actionCreators.mouseEnter()));
+        handleMouseEnter() {
+            dispatch(actionCreators.mouseEnter());
         },
-        handleMouseLeave(){
-            dispatch(dispatch(actionCreators.mouseLeave()));
+        handleMouseLeave() {
+            dispatch(actionCreators.mouseLeave());
         },
-        handleChangePage(page, totalPage, spin){
-            let originAngle = spin.style.transform.replace(/[^0-9]/ig, '')
-            if(originAngle){
-                originAngle =  parseInt(originAngle);
-            }else{
+        handleChangePage(page, totalPage, spin) {
+            let originAngle = spin.style.transform.replace(/[^0-9]/gi, '');
+            if (originAngle) {
+                originAngle = parseInt(originAngle);
+            } else {
                 originAngle = 0;
             }
 
             spin.style.transform = `rotate(${originAngle + 360}deg)`;
 
-            if(page < totalPage){
-                dispatch(dispatch(actionCreators.changePage(page+1)));
-            }else{
-                dispatch(dispatch(actionCreators.changePage(1)));
+            if (page < totalPage) {
+                dispatch(actionCreators.changePage(page + 1));
+            } else {
+                dispatch(actionCreators.changePage(1));
             }
         },
         logout() {
-			dispatch(loginActionCreators.logout());
-		}
-    }
-}
+            dispatch(loginActionCreators.logout());
+        }
+    };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Header);
